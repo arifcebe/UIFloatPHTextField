@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="UIFloatPHTextField" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XRu-VV-xt8" customClass="UIFloatPHTextfield" customModule="UIFloatPHTextField" customModuleProvider="target">
+                                <rect key="frame" x="15" y="70" width="345" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Irv-33-jCR"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="y9F-Bp-Hmj"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Voa-q5-qbg" customClass="UIFloatPHTextfield" customModule="UIFloatPHTextField" customModuleProvider="target">
+                                <rect key="frame" x="15" y="118" width="345" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="CQL-Tw-J1j"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="xpl-iq-P97"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="AJY-uH-5xK"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Country" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yrc-PX-chd" customClass="UIDropdownTextField" customModule="UIFloatPHTextField" customModuleProvider="target">
+                                <rect key="frame" x="15" y="166" width="345" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="aY4-me-95n"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Zhb-Fb-jGX"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Voa-q5-qbg" firstAttribute="top" secondItem="XRu-VV-xt8" secondAttribute="bottom" constant="8" id="671-DU-I4h"/>
+                            <constraint firstItem="XRu-VV-xt8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="7Zh-I1-aAF"/>
+                            <constraint firstItem="Yrc-PX-chd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="8T9-J2-qBd"/>
+                            <constraint firstItem="Voa-q5-qbg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="BAn-Pk-HTe"/>
+                            <constraint firstItem="XRu-VV-xt8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="IG6-sc-0v7"/>
+                            <constraint firstAttribute="trailing" secondItem="XRu-VV-xt8" secondAttribute="trailing" constant="15" id="Pqk-IU-OQB"/>
+                            <constraint firstAttribute="trailing" secondItem="Yrc-PX-chd" secondAttribute="trailing" constant="15" id="Vwx-J0-zQJ"/>
+                            <constraint firstItem="Yrc-PX-chd" firstAttribute="top" secondItem="Voa-q5-qbg" secondAttribute="bottom" constant="8" id="Yd1-sa-4cZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Voa-q5-qbg" secondAttribute="trailing" constant="15" id="b2n-IJ-sjs"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="autocomplete" destination="Yrc-PX-chd" id="K8M-pw-bs3"/>
+                        <outlet property="password" destination="Voa-q5-qbg" id="G3P-g5-Suj"/>
+                        <outlet property="test" destination="XRu-VV-xt8" id="VIt-y1-SMc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="138.98050974512745"/>
+        </scene>
+    </scenes>
+</document>
