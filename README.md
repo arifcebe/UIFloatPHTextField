@@ -52,11 +52,8 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate `QRCodeReader` into your Xcode project using Carthage, specify it in your `Cartfile` file:
+To integrate `UIFloatPHTextField` into your Xcode project using Carthage, specify it in your `Cartfile` file:
 
-```ogdl
+```
 github "sawijaya/UIFloatPHTextField.swift" >= 0.2.0
-
-### Manually
-
-1. Simply download the `UIFloatPHTextField.swift`, `UIDropdownTextField.swift` and `Resources/Images/*` files from [here](https://github.com/luispadron/UICircularProgressRing/tree/master/UICircularProgressRing) into your project, make sure you point to your projects target
+```
