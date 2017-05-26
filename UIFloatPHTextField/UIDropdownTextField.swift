@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class UIDropdownTextField: UIFloatPHTextfield {
+public class UIDropdownTextField: UIFloatPHTextfield {
     struct Item {
         var text: String?
         var value: String?
@@ -38,7 +38,7 @@ class UIDropdownTextField: UIFloatPHTextfield {
     var dataTask: URLSessionDataTask?
     
     // MARK: init
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         self.setup()
     }
@@ -48,7 +48,7 @@ class UIDropdownTextField: UIFloatPHTextfield {
         self.setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
@@ -105,7 +105,7 @@ class UIDropdownTextField: UIFloatPHTextfield {
         self.leftViewMode = .always
     }
     
-    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+    override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect: CGRect = super.leftViewRect(forBounds: bounds)
         rect.origin.x = 15
         rect.origin.y = 18
@@ -166,20 +166,20 @@ class UIDropdownTextField: UIFloatPHTextfield {
         }
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         self.layoutListView()
     }
     
-    override func becomeFirstResponder() -> Bool {
+    override public func becomeFirstResponder() -> Bool {
         if super.becomeFirstResponder() {
             self.toggleDropdownAnimationType(.show)
         }
         return false
     }
     
-    override func resignFirstResponder() -> Bool {
+    override public func resignFirstResponder() -> Bool {
         if self.canResignFirstResponder {
             self.toggleDropdownAnimationType(.hide)
             
@@ -255,11 +255,11 @@ class UIDropdownTextField: UIFloatPHTextfield {
 
 
 extension UIDropdownTextField: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 30
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row: Int = indexPath.row
         let item = self.isFilter ? self.itemsFilter[row] : self.items[row]
         self.text = item.text
@@ -279,11 +279,11 @@ extension UIDropdownTextField: UITableViewDataSource {
         return newImage!
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.isFilter ? self.itemsFilter.count : self.items.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = UITableViewCell(style: .default, reuseIdentifier: "IdentifierCell")
         let row: Int = indexPath.row
         let item = self.isFilter ? self.itemsFilter[row] : self.items[row]
