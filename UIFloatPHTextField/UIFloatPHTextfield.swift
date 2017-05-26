@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class UIFloatPHTextfield: UITextField {
+public class UIFloatPHTextfield: UITextField {
     private var length: NSInteger {
         get {
             let _text: String = self.text ?? ""
@@ -21,7 +21,7 @@ class UIFloatPHTextfield: UITextField {
         case hide
     }
     
-    override var placeholder: String?{
+    override public var placeholder: String?{
         didSet{
             self.floatLabel.text = self.placeholder
             self.floatLabel.sizeToFit()
@@ -58,7 +58,7 @@ class UIFloatPHTextfield: UITextField {
     public var onSelect:(String, NSIndexPath)->() = {_,_ in}
     
     // MARK: init
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         self.setup()
     }
@@ -68,7 +68,7 @@ class UIFloatPHTextfield: UITextField {
         self.setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
@@ -248,15 +248,15 @@ class UIFloatPHTextfield: UITextField {
     // MARK: -
     
     // MARK: UITextField (Override)
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
+    override public func textRect(forBounds bounds: CGRect) -> CGRect {
         return UIEdgeInsetsInsetRect(super.textRect(forBounds: bounds), self.floatLabelInsets())
     }
     
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+    override public func editingRect(forBounds bounds: CGRect) -> CGRect {
         return UIEdgeInsetsInsetRect(super.editingRect(forBounds: bounds), self.floatLabelInsets())
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         if !self.isFirstResponder && self.length == 0 {
@@ -270,7 +270,7 @@ class UIFloatPHTextfield: UITextField {
     // MARK: -
     
     // MARK: UIResponder (Override)
-    override func becomeFirstResponder() -> Bool {
+    override public func becomeFirstResponder() -> Bool {
         if super.becomeFirstResponder() {
             self.floatLabel.textColor = self.flActiveColor
             
@@ -290,7 +290,7 @@ class UIFloatPHTextfield: UITextField {
         return false
     }
     
-    override func resignFirstResponder() -> Bool {
+    override public func resignFirstResponder() -> Bool {
         if self.canResignFirstResponder {
             self.floatLabel.textColor = self.flPassiveColor
             
