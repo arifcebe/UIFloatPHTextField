@@ -32,6 +32,14 @@ public class UIDropdownTextField: UIFloatPHTextField {
     
     private var dropdownTextFieldButton: UIButton!
     
+    public var dropdownButtonTintColor: UIColor = UIColor.black {
+        didSet{
+            if self.dropdownTextFieldButton != nil {
+                self.dropdownTextFieldButton.imageView?.tintColor = self.dropdownButtonTintColor
+            }
+        }
+    }
+    
     private let actLoading: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     
     fileprivate var imageView: UIImageView!
@@ -121,9 +129,10 @@ public class UIDropdownTextField: UIFloatPHTextField {
         }
         let bundle: Bundle = Bundle(for: self.classForCoder)
         self.dropdownTextFieldButton = UIButton(type: .custom)
-        let imageInvisible: UIImage = UIImage(named: "dropdown", in: bundle, compatibleWith: nil) ?? UIImage()
+        let imageInvisible: UIImage = UIImage(named: "dropdown", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         self.dropdownTextFieldButton.setImage(imageInvisible, for: .normal)
         self.dropdownTextFieldButton.imageView?.contentMode = .center
+        self.dropdownTextFieldButton.imageView?.tintColor = UIColor.black
         self.dropdownTextFieldButton.frame = CGRect(x: 0, y: 0, width: 30, height: 25)
         self.rightView = self.dropdownTextFieldButton
         self.rightViewMode = .always
