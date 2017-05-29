@@ -16,10 +16,12 @@ class ViewController: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         self.test.isUnderline = false
         self.password.isUnderline = false
+        self.password.secureButtonTintColor = UIColor.red
         let item1: UIDropdownTextField.Item = UIDropdownTextField.Item(data: ["text":"Indonesia","value":"id"])
         let item2: UIDropdownTextField.Item = UIDropdownTextField.Item(data: ["text":"Singapore","value":"sg"])
         let items:[UIDropdownTextField.Item] = [item1, item2]
         self.autocomplete.items.append(contentsOf: items)
+        self.autocomplete.dropdownButtonTintColor = UIColor.red
         self.autocomplete.isUnderline = true
 //        self.autocomplete.fetchItemsFrom(ulrString: "http://localhost/countries.php")
     }

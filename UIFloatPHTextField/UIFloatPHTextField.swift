@@ -60,6 +60,14 @@ public class UIFloatPHTextField: UITextField {
     
     private var underlineView: UIView!
     
+    public var secureButtonTintColor: UIColor = UIColor.black {
+        didSet{
+            if self.isSecureTextEntry && self.secureTextFieldButton != nil {
+                self.secureTextFieldButton.imageView?.tintColor = self.secureButtonTintColor
+            }
+        }
+    }
+    
     // MARK: init
     override public func awakeFromNib() {
         super.awakeFromNib()
@@ -129,12 +137,13 @@ public class UIFloatPHTextField: UITextField {
             let bundle: Bundle = Bundle(for: self.classForCoder)
             self.secureTextFieldButton = UIButton(type: .custom)
             
-            let imageInvisible: UIImage = UIImage(named: "invisible", in: bundle, compatibleWith: nil) ?? UIImage()
+            let imageInvisible: UIImage = UIImage(named: "invisible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             self.secureTextFieldButton.setImage(imageInvisible, for: .normal)
-            let imageVisible: UIImage = UIImage(named: "visible", in: bundle, compatibleWith: nil) ?? UIImage()
+            let imageVisible: UIImage = UIImage(named: "visible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             self.secureTextFieldButton.setImage(imageVisible, for: .selected)
             self.secureTextFieldButton.setImage(nil, for: .highlighted)
             self.secureTextFieldButton.imageView?.contentMode = .center
+            self.secureTextFieldButton.imageView?.tintColor = UIColor.black
             self.secureTextFieldButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             self.rightView = self.secureTextFieldButton
             self.rightViewMode = .always
