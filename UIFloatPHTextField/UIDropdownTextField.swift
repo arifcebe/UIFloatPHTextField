@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-public class UIDropdownTextField: UIFloatPHTextfield {
-    struct Item {
+public class UIDropdownTextField: UIFloatPHTextField {
+    public struct Item {
         var text: String?
         var value: String?
         var image: UIImage?
@@ -21,11 +21,12 @@ public class UIDropdownTextField: UIFloatPHTextfield {
         }
     }
     
-    var items:[Item] = []
-    var isFilter: Bool = false
-    var itemsFilter:[Item] = []
+    public var items:[Item] = []
+    fileprivate var isFilter: Bool = false
+    fileprivate var itemsFilter:[Item] = []
     
-    var value: String?
+    public var selectedItem: Item?
+    public var value: String?
     
     private var listView: UITableView!
     
@@ -33,9 +34,9 @@ public class UIDropdownTextField: UIFloatPHTextfield {
     
     private let actLoading: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     
-    var imageView: UIImageView!
+    fileprivate var imageView: UIImageView!
     
-    var dataTask: URLSessionDataTask?
+    private var dataTask: URLSessionDataTask?
     
     // MARK: init
     override public func awakeFromNib() {
@@ -56,6 +57,7 @@ public class UIDropdownTextField: UIFloatPHTextfield {
     
     override func setup(){
         super.setup()
+        
         self.setupDropdownButton()
         
         self.setupAutoCompleteTable()
@@ -63,10 +65,10 @@ public class UIDropdownTextField: UIFloatPHTextfield {
         self.setupImageView()
     }
     
-    override var isUnderline: Bool {
+    override public var isUnderline: Bool {
         didSet{
             if let _ = self.listView {
-                self.listView.layer.borderColor = self.isUnderline ? self.flPassiveColor.cgColor : self.flActiveColor.cgColor
+                self.listView.layer.borderColor = self.isUnderline ? self.labelTextPassiveColor.cgColor : self.labelTextActiveColor.cgColor
             }
         }
     }
@@ -75,6 +77,7 @@ public class UIDropdownTextField: UIFloatPHTextfield {
         if self.listView != nil {
             return
         }
+        
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
         tableView.alpha = 0
         tableView.layer.borderColor = UIColor.clear.cgColor
@@ -116,22 +119,20 @@ public class UIDropdownTextField: UIFloatPHTextfield {
         if self.dropdownTextFieldButton != nil {
             return
         }
+        let bundle: Bundle = Bundle(for: self.classForCoder)
         self.dropdownTextFieldButton = UIButton(type: .custom)
-        let imageInvisible: UIImage = UIImage(named: "dropdown") ?? UIImage()
+        let imageInvisible: UIImage = UIImage(named: "dropdown", in: bundle, compatibleWith: nil) ?? UIImage()
         self.dropdownTextFieldButton.setImage(imageInvisible, for: .normal)
-        let imageVisible: UIImage = UIImage(named: "dropdown") ?? UIImage()
-        self.dropdownTextFieldButton.setImage(imageVisible, for: .selected)
-        self.dropdownTextFieldButton.setImage(nil, for: .highlighted)
         self.dropdownTextFieldButton.imageView?.contentMode = .center
         self.dropdownTextFieldButton.frame = CGRect(x: 0, y: 0, width: 30, height: 25)
         self.rightView = self.dropdownTextFieldButton
         self.rightViewMode = .always
     }
     
-    private func toggleDropdownPropertiesWith(animationType: UIFloatLabelAnimationType) {
+    private func toggleDropdownPropertiesWith(animationType: UIlabelAnimationType) {
         self.listView.alpha = (animationType == .show) ? 1 : 0
         let tableViewHeight: CGFloat = (animationType == .show) ? 120 : 0
-        self.listView.layer.borderColor = (animationType == .show) ? self.flActiveColor.cgColor : self.flPassiveColor.cgColor
+        self.listView.layer.borderColor = (animationType == .show) ? self.labelTextActiveColor.cgColor : self.labelTextPassiveColor.cgColor
         let borderColor: CGColor = self.listView.layer.borderColor ?? UIColor.clear.cgColor
         self.listView.layer.borderColor = self.isUnderline ? borderColor : UIColor.clear.cgColor
         var frame: CGRect = self.listView.frame
@@ -139,14 +140,12 @@ public class UIDropdownTextField: UIFloatPHTextfield {
         self.listView.frame = frame
     }
     
-    func toggleDropdownAnimationType(_ animationType: UIFloatLabelAnimationType) {
+    func toggleDropdownAnimationType(_ animationType: UIlabelAnimationType) {
         let easingOptions: UIViewAnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
         if animationType == .show {
             self.listView.removeFromSuperview()
-            //        view.addSubview(self.autoCompleteTableView)
             let index: NSInteger = superview?.subviews.count ?? 0
-            print(index)
-            superview?.insertSubview(self.listView, at: index)
+            self.superview?.insertSubview(self.listView, at: index)
         }
         let combinedOptions: UIViewAnimationOptions = [.beginFromCurrentState, easingOptions]
         

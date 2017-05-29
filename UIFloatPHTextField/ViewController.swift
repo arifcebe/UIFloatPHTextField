@@ -8,8 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController,UITextFieldDelegate {
-    @IBOutlet weak var test: UIFloatPHTextfield!
-    @IBOutlet weak var password: UIFloatPHTextfield!
+    @IBOutlet weak var test: UIFloatPHTextField!
+    @IBOutlet weak var password: UIFloatPHTextField!
     @IBOutlet weak var autocomplete: UIDropdownTextField!
 
     override func viewDidLoad() {
@@ -20,6 +20,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
         let item2: UIDropdownTextField.Item = UIDropdownTextField.Item(data: ["text":"Singapore","value":"sg"])
         let items:[UIDropdownTextField.Item] = [item1, item2]
         self.autocomplete.items.append(contentsOf: items)
+        self.autocomplete.isUnderline = true
 //        self.autocomplete.fetchItemsFrom(ulrString: "http://localhost/countries.php")
     }
 
