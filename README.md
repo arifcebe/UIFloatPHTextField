@@ -27,7 +27,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'TargetName' do
-    pod 'UIFloatPHTextField.swift', '~> 0.3.0'
+    pod 'UIFloatPHTextField.swift', '~> 0.4.0'
 end
 ```
 Install into your project:
