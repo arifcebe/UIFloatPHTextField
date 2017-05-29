@@ -21,9 +21,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XRu-VV-xt8" customClass="UIFloatPHTextfield" customModule="UIFloatPHTextField" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XRu-VV-xt8" customClass="UIFloatPHTextField" customModule="UIFloatPHTextField" customModuleProvider="target">
                                 <rect key="frame" x="15" y="70" width="345" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Irv-33-jCR"/>
                                 </constraints>
@@ -34,9 +34,9 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="y9F-Bp-Hmj"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Voa-q5-qbg" customClass="UIFloatPHTextfield" customModule="UIFloatPHTextField" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Voa-q5-qbg" customClass="UIFloatPHTextField" customModule="UIFloatPHTextField" customModuleProvider="target">
                                 <rect key="frame" x="15" y="118" width="345" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="CQL-Tw-J1j"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="xpl-iq-P97"/>
@@ -50,7 +50,7 @@
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Country" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yrc-PX-chd" customClass="UIDropdownTextField" customModule="UIFloatPHTextField" customModuleProvider="target">
                                 <rect key="frame" x="15" y="166" width="345" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="aY4-me-95n"/>
                                 </constraints>
@@ -62,7 +62,7 @@
                                 </connections>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.28974066840000001" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Voa-q5-qbg" firstAttribute="top" secondItem="XRu-VV-xt8" secondAttribute="bottom" constant="8" id="671-DU-I4h"/>
                             <constraint firstItem="XRu-VV-xt8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="7Zh-I1-aAF"/>

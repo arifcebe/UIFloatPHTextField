@@ -1,5 +1,5 @@
 //
-//  UIFloatPHTextfield.swift
+//  UIFloatPHTextField.swift
 //
 //  Created by Salim Wijaya
 //  Copyright © 2017. All rights reserved.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public class UIFloatPHTextfield: UITextField {
+public class UIFloatPHTextField: UITextField {
     private var length: NSInteger {
         get {
             let _text: String = self.text ?? ""
@@ -16,15 +16,15 @@ public class UIFloatPHTextfield: UITextField {
         }
     }
     
-    internal enum UIFloatLabelAnimationType {
+    internal enum UIlabelAnimationType {
         case show
         case hide
     }
     
     override public var placeholder: String?{
         didSet{
-            self.floatLabel.text = self.placeholder
-            self.floatLabel.sizeToFit()
+            self.label.text = self.placeholder
+            self.label.sizeToFit()
         }
         willSet{
         
@@ -33,29 +33,32 @@ public class UIFloatPHTextfield: UITextField {
     
     private let nc = NotificationCenter.default
     
-    private var floatLabel: UILabel!
+    private var label: UILabel!
     
-    private var flPointX: CGFloat = 15
+    private var flPointX: CGFloat = 5
     
-    var flPassiveColor: UIColor = UIColor.black
-    var flActiveColor: UIColor = UIColor.black
+    public var labelTextPassiveColor: UIColor = UIColor.black
+    public var labelTextActiveColor: UIColor = UIColor.black
     
     private var storedText: String = ""
     
     private var secureTextFieldButton: UIButton!
     
-    var isUnderline: Bool = false {
+    public var isUnderline: Bool = false {
         didSet {
             self.underlineView.isHidden = !self.isUnderline
         }
     }
     
+    public var underlineColor: UIColor = UIColor.black {
+        didSet{
+            self.underlineView.backgroundColor = self.underlineColor
+        }
+    }
+    
     private var didChangeSecureTextField: Bool = false
     
-    internal var underlineView: UIView!
-    
-    private var autoCompleteTableView:UITableView!
-    public var onSelect:(String, NSIndexPath)->() = {_,_ in}
+    private var underlineView: UIView!
     
     // MARK: init
     override public func awakeFromNib() {
@@ -79,12 +82,12 @@ public class UIFloatPHTextfield: UITextField {
     internal func setup(){
         self.clipsToBounds = false
         
-        self.flPassiveColor = UIColor.lightGray
-        self.flActiveColor = UIColor.blue
+        self.labelTextPassiveColor = UIColor.lightGray
+        self.labelTextActiveColor = UIColor.black
         
         self.setupTextField()
         
-        self.setupFloatLabel()
+        self.setuplabel()
         
         self.setupSecureTextFieldButton()
         
@@ -93,32 +96,29 @@ public class UIFloatPHTextfield: UITextField {
         self.isUnderline = false
     }
     
-    private func setupFloatLabel(){
-        if self.floatLabel != nil {
+    private func setuplabel(){
+        if self.label != nil {
             return
         }
         
-        self.floatLabel = UILabel()
-        self.floatLabel.textColor = UIColor.black
-        self.floatLabel.font = UIFont.boldSystemFont(ofSize: 12)
-        self.floatLabel.center = CGPoint(x: self.flPointX, y: 0)
-        self.floatLabel.alpha = 0
+        self.label = UILabel()
+        self.label.textColor = UIColor.black
+        self.label.font = UIFont.boldSystemFont(ofSize: 12)
+        self.label.center = CGPoint(x: self.flPointX, y: 0)
+        self.label.alpha = 0
         
-        self.floatLabel.text = self.placeholder
-        self.floatLabel.sizeToFit()
-        self.floatLabel.textAlignment = self.textAlignment
+        self.label.text = self.placeholder
+        self.label.sizeToFit()
+        self.label.textAlignment = self.textAlignment
         
-        self.addSubview(self.floatLabel)
+        self.addSubview(self.label)
     }
     
     private func setupTextField(){
-//        self.addTarget(self, action: #selector(textDidChange), for: UIControlEvents.editingChanged)
         self.textAlignment = .left
-        self.nc.addObserver(self, selector: #selector(UIFloatPHTextfield.textDidChange), name: .UITextFieldTextDidChange, object: nil)
+        self.nc.addObserver(self, selector: #selector(UIFloatPHTextField.textDidChange), name: .UITextFieldTextDidChange, object: nil)
         self.clearsOnBeginEditing = false
     }
-    
-    
     
     private func setupSecureTextFieldButton(){
         if self.secureTextFieldButton != nil {
@@ -126,10 +126,12 @@ public class UIFloatPHTextfield: UITextField {
         }
         
         if self.isSecureTextEntry {
+            let bundle: Bundle = Bundle(for: self.classForCoder)
             self.secureTextFieldButton = UIButton(type: .custom)
-            let imageInvisible: UIImage = UIImage(named: "invisible") ?? UIImage()
+            
+            let imageInvisible: UIImage = UIImage(named: "invisible", in: bundle, compatibleWith: nil) ?? UIImage()
             self.secureTextFieldButton.setImage(imageInvisible, for: .normal)
-            let imageVisible: UIImage = UIImage(named: "visible") ?? UIImage()
+            let imageVisible: UIImage = UIImage(named: "visible", in: bundle, compatibleWith: nil) ?? UIImage()
             self.secureTextFieldButton.setImage(imageVisible, for: .selected)
             self.secureTextFieldButton.setImage(nil, for: .highlighted)
             self.secureTextFieldButton.imageView?.contentMode = .center
@@ -154,7 +156,7 @@ public class UIFloatPHTextfield: UITextField {
         let width: CGFloat = self.frame.width
         
         self.underlineView.frame = CGRect(x: 0, y: pointY, width: width, height: 1)
-        self.underlineView.backgroundColor = self.flPassiveColor
+        self.underlineView.backgroundColor = self.labelTextPassiveColor
         self.addSubview(self.underlineView)
     }
     // MARK: -
@@ -206,8 +208,8 @@ public class UIFloatPHTextfield: UITextField {
             
             if _text != "" {
                 self.storedText = _text
-                if self.floatLabel.alpha == 0 {
-                    self.toggleFloatLabelAnimatanionType(.show)
+                if self.label.alpha == 0 {
+                    self.togglelabelAnimatanionType(.show)
                 }
             } else {
                 if self.didChangeSecureTextField {
@@ -215,54 +217,54 @@ public class UIFloatPHTextfield: UITextField {
                     self.text = storedText
                     return
                 }
-                if self.floatLabel.alpha != 0 {
-                    self.toggleFloatLabelAnimatanionType(.hide)
+                if self.label.alpha != 0 {
+                    self.togglelabelAnimatanionType(.hide)
                 }
                 self.storedText = ""
             }
         }
     }
     
-    private func toggleFloatLabelPropertiesWith(animationType: UIFloatLabelAnimationType) {
-        self.floatLabel.alpha = (animationType == .show) ? 1 : 0
+    private func togglelabelPropertiesWith(animationType: UIlabelAnimationType) {
+        self.label.alpha = (animationType == .show) ? 1 : 0
         let flPointY: CGFloat = (animationType == .show) ? 0 : 0.5 * self.frame.height
         
-        self.floatLabel.frame = CGRect(x: self.flPointX, y: flPointY, width: self.floatLabel.frame.width, height: self.floatLabel.frame.height)
+        self.label.frame = CGRect(x: self.flPointX, y: flPointY, width: self.label.frame.width, height: self.label.frame.height)
     }
     
-    private func toggleFloatLabelAnimatanionType(_ animationType: UIFloatLabelAnimationType) {
+    private func togglelabelAnimatanionType(_ animationType: UIlabelAnimationType) {
         let easingOptions: UIViewAnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
         
         let combinedOptions: UIViewAnimationOptions = [.beginFromCurrentState, easingOptions]
         
         let duration: CGFloat = animationType == .show ? 0.25 : 0.05
         UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: combinedOptions, animations: { 
-            self.toggleFloatLabelPropertiesWith(animationType: animationType)
+            self.togglelabelPropertiesWith(animationType: animationType)
         }, completion: nil)
     }
         
-    private func floatLabelInsets() -> UIEdgeInsets {
+    private func labelInsets() -> UIEdgeInsets {
         let top: CGFloat = (self.length == 0) ? 0 : 10
-        return UIEdgeInsets(top: top, left: 15, bottom: 0, right: 5)
+        return UIEdgeInsets(top: top, left: 5, bottom: 0, right: 5)
     }
     // MARK: -
     
     // MARK: UITextField (Override)
     override public func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(super.textRect(forBounds: bounds), self.floatLabelInsets())
+        return UIEdgeInsetsInsetRect(super.textRect(forBounds: bounds), self.labelInsets())
     }
     
     override public func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(super.editingRect(forBounds: bounds), self.floatLabelInsets())
+        return UIEdgeInsetsInsetRect(super.editingRect(forBounds: bounds), self.labelInsets())
     }
     
     override public func layoutSubviews() {
         super.layoutSubviews()
         
         if !self.isFirstResponder && self.length == 0 {
-            self.toggleFloatLabelPropertiesWith(animationType: .hide)
+            self.togglelabelPropertiesWith(animationType: .hide)
         } else if self.length != 0 {
-            self.toggleFloatLabelPropertiesWith(animationType: .show)
+            self.togglelabelPropertiesWith(animationType: .show)
         }
         
         self.layoutUnderlineView()
@@ -272,9 +274,9 @@ public class UIFloatPHTextfield: UITextField {
     // MARK: UIResponder (Override)
     override public func becomeFirstResponder() -> Bool {
         if super.becomeFirstResponder() {
-            self.floatLabel.textColor = self.flActiveColor
+            self.label.textColor = self.labelTextActiveColor
             
-            self.underlineView.backgroundColor = self.flActiveColor
+            self.underlineView.backgroundColor = self.labelTextActiveColor
             var frame: CGRect = underlineView.frame
             frame.size.height = 2
             self.underlineView.frame = frame
@@ -292,9 +294,9 @@ public class UIFloatPHTextfield: UITextField {
     
     override public func resignFirstResponder() -> Bool {
         if self.canResignFirstResponder {
-            self.floatLabel.textColor = self.flPassiveColor
+            self.label.textColor = self.labelTextPassiveColor
             
-            self.underlineView.backgroundColor = self.flPassiveColor
+            self.underlineView.backgroundColor = self.labelTextPassiveColor
             var frame: CGRect = underlineView.frame
             frame.size.height = 1
             self.underlineView.frame = frame
