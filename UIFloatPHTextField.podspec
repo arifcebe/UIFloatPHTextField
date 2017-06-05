@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.source_files = ['UIFloatPHTextField/UIDropdownTextField.swift','UIFloatPHTextField/UIFloatPHTextfield.swift',
                     'UIFloatPHTextField/Fetch.swift','UIFloatPHTextField/UIImage+UIFloatPHTextField.swift','UIFloatPHTextField/UIImageView+UIFloatPHTextField.swift',
-                    'UIFloatPHTextField/Item.swift']
+                    'UIFloatPHTextField/Item.swift','UIFloatPHTextField/DataConvertible.swift']
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
 end
