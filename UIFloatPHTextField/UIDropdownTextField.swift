@@ -9,23 +9,19 @@ import Foundation
 import UIKit
 
 public class UIDropdownTextField: UIFloatPHTextField {
-    public struct Item {
-        var text: String?
-        var value: String?
-        var image: UIImage?
-        
-        init(data:[String:Any]) {
-            self.text = data["text"] as? String
-            self.value = data["value"] as? String
-            self.image = data["image"] as? UIImage
-        }
+    
+    public struct MapDictionary {
+        var text: String
+        var value: String
+        var image: String
     }
     
-    public var items:[Item] = []
+    public var mapDictionary: MapDictionary = MapDictionary(text: "text", value: "value", image: "image")
+    public var items:[Item<ItemImage>] = []
     fileprivate var isFilter: Bool = false
-    fileprivate var itemsFilter:[Item] = []
+    fileprivate var itemsFilter:[Item<ItemImage>] = []
     
-    public var selectedItem: Item?
+    public var selectedItem: Item<ItemImage>?
     public var value: String?
     
     private var listView: UITableView!
@@ -43,9 +39,7 @@ public class UIDropdownTextField: UIFloatPHTextField {
     private let actLoading: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     
     fileprivate var imageView: UIImageView!
-    
-    private var dataTask: URLSessionDataTask?
-    
+    public var isThumbnail: Bool = false
     // MARK: init
     override public func awakeFromNib() {
         super.awakeFromNib()
@@ -90,7 +84,6 @@ public class UIDropdownTextField: UIFloatPHTextField {
         tableView.alpha = 0
         tableView.layer.borderColor = UIColor.clear.cgColor
         tableView.layer.borderWidth = 1
-        
         tableView.contentInset = UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
         
         let x: CGFloat = self.frame.origin.x
@@ -118,7 +111,7 @@ public class UIDropdownTextField: UIFloatPHTextField {
     
     override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect: CGRect = super.leftViewRect(forBounds: bounds)
-        rect.origin.x = 15
+        rect.origin.x = 6
         rect.origin.y = 18
         return rect
     }
@@ -191,17 +184,39 @@ public class UIDropdownTextField: UIFloatPHTextField {
         if self.canResignFirstResponder {
             self.toggleDropdownAnimationType(.hide)
             
-            if self.items.count != 0 {
-                let item = self.items.filter({ (item: Item) -> Bool in
-                    if item.text?.lowercased() == self.text?.lowercased() {
-                        return true
-                    }
-                    return false
-                }).first
+            let item = self.items.filter({ (item: Item) -> Bool in
+                if item.text?.lowercased() == self.text?.lowercased() {
+                    return true
+                }
+                return false
+            }).first
+            
+            if item != nil {
                 self.text = item?.text
                 self.value = item?.value
-                self.imageView.image = item?.image
-                self.leftView = item?.image != nil ? self.imageView : nil
+                if self.isThumbnail {
+                    if let data = item?.image?.data {
+                        self.imageView.image = UIImage(data: data)
+                        self.leftView = self.imageView
+                    } else if let image = item?.image?.image {
+                        self.imageView.image = image
+                        self.leftView = self.imageView
+                    } else if let string = item?.image?.string {
+                        if let url: URL = URL(string: string) {
+                            self.imageView.fph_setImageFromURL(url)
+                            self.leftView = self.imageView
+                        } else {
+                            self.imageView.image = UIImage(named: string)
+                            self.leftView = self.imageView
+                        }
+                    }
+                    
+                }
+            } else {
+                self.text = nil
+                self.value = nil
+                self.imageView.image = nil
+                self.leftView = nil
             }
             return super.resignFirstResponder()
         }
@@ -211,26 +226,25 @@ public class UIDropdownTextField: UIFloatPHTextField {
     func fetchItemsFrom(ulrString: String) {
         self.listView.tableHeaderView = self.actLoading
         self.actLoading.startAnimating()
-        let url: URL = URL(string: ulrString)!
-        self.dataTask = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-            if let data = data {
-                do{
-                    let result = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                    if let _items:[Any] = result as? [Any] {
-                        for _item in _items {
-                            let __item:Item = Item(data: _item as! [String : Any])
-                            self.items.append(__item)
-                        }
-                        self.listView.reloadData()
-                        self.listView.tableHeaderView = nil
-                    }
-                } catch {
-                    print(error)
+        let fetch: Fetch = Fetch<JSON>(URL: URL(string: ulrString)!)
+        fetch.request(failure: { (error) in
+            self.actLoading.stopAnimating()
+        }, success: { (json) in
+            if let items:[Any] = json.array {
+                for _item in items {
+                    let _itemData:[String:Any] = _item as? [String:Any] ?? [:]
+                    var dataItem:[String: Any] = [:]
+                    dataItem["text"] = _itemData[self.mapDictionary.text] ?? ""
+                    dataItem["value"] = _itemData[self.mapDictionary.value] ?? ""
+                    dataItem["image"] = _itemData[self.mapDictionary.image] ?? ""
+                    let __item = Item<ItemImage>(data: dataItem)
+                    self.items.append(__item)
+                    self.listView.reloadData()
+                    self.listView.tableHeaderView = nil
                 }
-                self.actLoading.stopAnimating()
             }
+            self.actLoading.stopAnimating()
         })
-        self.dataTask?.resume()
     }
     
     override func textDidChange(notification: Notification) {
@@ -261,7 +275,6 @@ public class UIDropdownTextField: UIFloatPHTextField {
     }
 }
 
-
 extension UIDropdownTextField: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 30
@@ -272,8 +285,24 @@ extension UIDropdownTextField: UITableViewDelegate {
         let item = self.isFilter ? self.itemsFilter[row] : self.items[row]
         self.text = item.text
         self.value = item.value
-        self.imageView.image = item.image
-        self.leftView = self.imageView
+        if self.isThumbnail {
+            if let data = item.image?.data {
+                self.imageView.image = UIImage(data: data)
+                self.leftView = self.imageView
+            } else if let image = item.image?.image {
+                self.imageView.image = image
+                self.leftView = self.imageView
+            } else if let string = item.image?.string {
+                if let url: URL = URL(string: string) {
+                    self.imageView.fph_setImageFromURL(url)
+                    self.leftView = self.imageView
+                } else {
+                    self.imageView.image = UIImage(named: string)
+                    self.leftView = self.imageView
+                }
+            }
+
+        }
         self.endEditing(true)
     }
 }
@@ -295,8 +324,31 @@ extension UIDropdownTextField: UITableViewDataSource {
         let cell: UITableViewCell = UITableViewCell(style: .default, reuseIdentifier: "IdentifierCell")
         let row: Int = indexPath.row
         let item = self.isFilter ? self.itemsFilter[row] : self.items[row]
-        if let image = item.image {
-            cell.imageView?.image = self.createImage(image, scaleToSize: CGSize(width: 39, height: 26))
+        if self.isThumbnail {
+            cell.imageView?.contentMode = .scaleAspectFit
+            var image: UIImage = UIImage()
+            if let data = item.image?.data {
+                image = UIImage(data: data)!
+                cell.imageView?.image = self.createImage(image, scaleToSize: CGSize(width: 39, height: 26))
+            } else if let _image = item.image?.image {
+                image = _image
+                cell.imageView?.image = self.createImage(image, scaleToSize: CGSize(width: 39, height: 26))
+            } else if let string = item.image?.string {
+                if let url: URL = URL(string: string) {
+                    let placeholderImage = UIImage.imageWithColor(UIColor.clear, bounds: CGRect(x: 0, y: 0, width: 39, height: 26))
+                    cell.imageView?.fph_setImageFromURL(url,
+                                                        placeholder: placeholderImage,
+                                                        failure: nil,
+                                                        success: { (_image) in
+                                                            UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                                                                cell.imageView?.image = self.createImage(_image, scaleToSize: CGSize(width: 39, height: 26))
+                                                            }, completion: nil)
+                    })
+                } else {
+                    image = UIImage(named: string)!
+                    cell.imageView?.image = self.createImage(image, scaleToSize: CGSize(width: 39, height: 26))
+                }
+            }
         }
         let text: String = item.text ?? ""
         cell.textLabel?.text = text
