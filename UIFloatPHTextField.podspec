@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'UIFloatPHTextField'
-  s.version          = '0.4.0'
+  s.version          = '0.5.0'
   s.summary          = 'Create a label from placeholder in UITextField and easy use for dropdown in UITextField'
   s.description      = <<-DESC
                         UIFloatPHTextField is simple ui for create placeholder replace label and base class for dropdown.

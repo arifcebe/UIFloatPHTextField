@@ -137,9 +137,9 @@ public class UIFloatPHTextField: UITextField {
             let bundle: Bundle = Bundle(for: self.classForCoder)
             self.secureTextFieldButton = UIButton(type: .custom)
             
-            let imageInvisible: UIImage = UIImage(named: "invisible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            let imageInvisible: UIImage = UIImage(named: "visible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             self.secureTextFieldButton.setImage(imageInvisible, for: .normal)
-            let imageVisible: UIImage = UIImage(named: "visible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+            let imageVisible: UIImage = UIImage(named: "invisible", in: bundle, compatibleWith: nil)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
             self.secureTextFieldButton.setImage(imageVisible, for: .selected)
             self.secureTextFieldButton.setImage(nil, for: .highlighted)
             self.secureTextFieldButton.imageView?.contentMode = .center
@@ -283,6 +283,7 @@ public class UIFloatPHTextField: UITextField {
     // MARK: UIResponder (Override)
     override public func becomeFirstResponder() -> Bool {
         if super.becomeFirstResponder() {
+            
             self.label.textColor = self.labelTextActiveColor
             
             self.underlineView.backgroundColor = self.labelTextActiveColor
