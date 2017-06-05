@@ -22,10 +22,8 @@ extension UIImageView {
         self.image = placeholder
         self.fph_cancelSetImage()
         
-        fetcher.request(failure: { [weak self] (error) in
-//            if let strongSelf = self {
-                fail?(error)
-//            }
+        fetcher.request(failure: { (error) in
+            fail?(error)
         }, success: { [weak self] (image) in
             if let strongSelf = self {
                 strongSelf.fph_setImage(image, animated: true, success: succeed)

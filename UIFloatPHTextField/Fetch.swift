@@ -51,7 +51,7 @@ class Fetch<T: DataConvertible> {
         }
         
         guard let value = T.convertFromData(data) else {
-            let localizedFormat = NSLocalizedString("Failed to convert value from data at URL %@", comment: "Error description")
+//            let localizedFormat = NSLocalizedString("Failed to convert value from data at URL %@", comment: "Error description")
 //            let description = String(format:localizedFormat, (self.URL.url?.absoluteString)!)
 //            print(description)
 //            DispatchQueue.main.async(execute: { fail(error) })
