@@ -27,7 +27,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'TargetName' do
-    pod 'UIFloatPHTextField.swift', '~> 0.5.0'
+    pod 'UIFloatPHTextField.swift', '~> 0.6.0'
 end
 ```
 Install into your project:
@@ -55,5 +55,5 @@ $ brew install carthage
 To integrate `UIFloatPHTextField` into your Xcode project using Carthage, specify it in your `Cartfile` file:
 
 ```
-github "sawijaya/UIFloatPHTextField.swift" >= 0.5.0
+github "sawijaya/UIFloatPHTextField.swift" >= 0.6.0
 ```
