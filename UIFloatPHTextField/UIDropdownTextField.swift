@@ -223,7 +223,7 @@ public class UIDropdownTextField: UIFloatPHTextField {
         return false
     }
     
-    func fetchItemsFrom(ulrString: String) {
+    public func fetchItemsFrom(ulrString: String) {
         self.listView.tableHeaderView = self.actLoading
         self.actLoading.startAnimating()
         let fetch: Fetch = Fetch<JSON>(URL: URL(string: ulrString)!)
