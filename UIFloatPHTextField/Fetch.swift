@@ -42,7 +42,6 @@ class Fetch<T: DataConvertible> {
     fileprivate func onReceive(data: Data!, response: URLResponse!, error: Error!, failure fail: @escaping ((Error?) -> ()), success succeed: @escaping (T.Result) -> ()) {
         if cancelled { return }
         
-        
         if let error = error {
             if ((error as NSError).domain == NSURLErrorDomain && (error as NSError).code == NSURLErrorCancelled) { return }
             

@@ -61,13 +61,16 @@ public enum ItemImage: ItemConvertible {
 }
 
 public struct Item<T: ItemConvertible> {
-    var text: String?
-    var value: String?
-    var image: T?
-    init(data:[String:Any]) {
+    public var text: String?
+    public var value: String?
+    public var image: T?
+    public var data:[String:Any]?
+    public init(data:[String:Any]) {
         self.text = data["text"] as? String
         self.value = data["value"] as? String
         let itemImage = ItemImage.dataType(data["image"])
         self.image = itemImage as? T
+        
+        self.data = data
     }
 }
