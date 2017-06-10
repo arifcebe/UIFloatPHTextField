@@ -11,9 +11,9 @@ import UIKit
 public class UIDropdownTextField: UIFloatPHTextField {
     
     public struct MapDictionary {
-        var text: String
-        var value: String
-        var image: String
+        public var text: String
+        public var value: String
+        public var image: String
     }
     
     public var mapDictionary: MapDictionary = MapDictionary(text: "text", value: "value", image: "image")
@@ -283,6 +283,7 @@ extension UIDropdownTextField: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row: Int = indexPath.row
         let item = self.isFilter ? self.itemsFilter[row] : self.items[row]
+        self.selectedItem = item
         self.text = item.text
         self.value = item.value
         if self.isThumbnail {
