@@ -12,7 +12,8 @@ public class UIFloatPHTextField: UITextField {
     private var length: NSInteger {
         get {
             let _text: String = self.text ?? ""
-            return _text.characters.count
+//            return _text.characters.count
+            return _text.count
         }
     }
     
@@ -124,7 +125,7 @@ public class UIFloatPHTextField: UITextField {
     
     private func setupTextField(){
         self.textAlignment = .left
-        self.nc.addObserver(self, selector: #selector(UIFloatPHTextField.textDidChange), name: .UITextFieldTextDidChange, object: nil)
+        self.nc.addObserver(self, selector: #selector(UIFloatPHTextField.textDidChange), name: UITextField.textDidChangeNotification, object: nil)
         self.clearsOnBeginEditing = false
     }
     
@@ -180,22 +181,22 @@ public class UIFloatPHTextField: UITextField {
         }
     }
     
-    internal func tapSecureTextField(sender: UIButton) {
+    @objc internal func tapSecureTextField(sender: UIButton) {
         self.secureTextFieldButton.isSelected = self.isSecureTextEntry
         self.isSecureTextEntry = !self.isSecureTextEntry
         self.didChangeSecureTextField = self.isSecureTextEntry
         
         let _text: String = self.text ?? ""
         let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: _text)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font!, range: NSMakeRange(0, self.length))
+        attributedString.addAttribute(NSAttributedString.Key.font, value: self.font!, range: NSMakeRange(0, self.length))
         self.attributedText = attributedString
     }
     
     deinit {
-        self.nc.removeObserver(self, name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        self.nc.removeObserver(self, name: UITextField.textDidChangeNotification, object: nil)
     }
     
-    internal func textDidChange(notification: Notification) {
+    @objc internal func textDidChange(notification: Notification) {
         guard let object: UITextField = notification.object as? UITextField else {
             return
         }
@@ -209,7 +210,7 @@ public class UIFloatPHTextField: UITextField {
             
             let _text: String = self.text ?? ""
             
-            attributedString.addAttribute(NSFontAttributeName, value: self.font!, range: NSMakeRange(0, self.length))
+            attributedString.addAttribute(NSAttributedString.Key.font, value: self.font!, range: NSMakeRange(0, self.length))
             self.attributedText = attributedString
             
             //TODO: set current position cursor
@@ -242,9 +243,9 @@ public class UIFloatPHTextField: UITextField {
     }
     
     private func togglelabelAnimatanionType(_ animationType: UIlabelAnimationType) {
-        let easingOptions: UIViewAnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
+        let easingOptions: UIView.AnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
         
-        let combinedOptions: UIViewAnimationOptions = [.beginFromCurrentState, easingOptions]
+        let combinedOptions: UIView.AnimationOptions = [.beginFromCurrentState, easingOptions]
         
         let duration: CGFloat = animationType == .show ? 0.25 : 0.05
         UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: combinedOptions, animations: { 
@@ -260,11 +261,11 @@ public class UIFloatPHTextField: UITextField {
     
     // MARK: UITextField (Override)
     override public func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(super.textRect(forBounds: bounds), self.labelInsets())
+        return bounds.inset(by: self.labelInsets())
     }
     
     override public func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(super.editingRect(forBounds: bounds), self.labelInsets())
+        return bounds.inset(by: self.labelInsets())
     }
     
     override public func layoutSubviews() {

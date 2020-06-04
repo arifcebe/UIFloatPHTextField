@@ -14,9 +14,10 @@ public class UIDropdownTextField: UIFloatPHTextField {
         public var text: String
         public var value: String
         public var image: String
+        public var calling_code: String
     }
     
-    public var mapDictionary: MapDictionary = MapDictionary(text: "text", value: "value", image: "image")
+    public var mapDictionary: MapDictionary = MapDictionary(text: "text", value: "value", image: "image", calling_code: "calling_code")
     public var items:[Item<ItemImage>] = []
     fileprivate var isFilter: Bool = false
     fileprivate var itemsFilter:[Item<ItemImage>] = []
@@ -36,7 +37,7 @@ public class UIDropdownTextField: UIFloatPHTextField {
         }
     }
     
-    private let actLoading: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    private let actLoading: UIActivityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
     fileprivate var imageView: UIImageView!
     public var isThumbnail: Bool = false
@@ -143,13 +144,13 @@ public class UIDropdownTextField: UIFloatPHTextField {
     }
     
     func toggleDropdownAnimationType(_ animationType: UIlabelAnimationType) {
-        let easingOptions: UIViewAnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
+        let easingOptions: UIView.AnimationOptions = animationType == .show ? .curveEaseOut : .curveEaseIn
         if animationType == .show {
             self.listView.removeFromSuperview()
             let index: NSInteger = superview?.subviews.count ?? 0
             self.superview?.insertSubview(self.listView, at: index)
         }
-        let combinedOptions: UIViewAnimationOptions = [.beginFromCurrentState, easingOptions]
+        let combinedOptions: UIView.AnimationOptions = [.beginFromCurrentState, easingOptions]
         
         let duration: CGFloat = animationType == .show ? 0.3 : 0.25
         UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: combinedOptions, animations: {
@@ -228,8 +229,10 @@ public class UIDropdownTextField: UIFloatPHTextField {
         self.actLoading.startAnimating()
         let fetch: Fetch = Fetch<JSON>(URL: URL(string: ulrString)!)
         fetch.request(failure: { (error) in
+            print("json error response \(error?.localizedDescription)")
             self.actLoading.stopAnimating()
         }, success: { (json) in
+            print("json response \(json)")
             if let items:[Any] = json.array {
                 for _item in items {
                     let _itemData:[String:Any] = _item as? [String:Any] ?? [:]
@@ -237,10 +240,37 @@ public class UIDropdownTextField: UIFloatPHTextField {
                     dataItem["text"] = _itemData[self.mapDictionary.text] ?? ""
                     dataItem["value"] = _itemData[self.mapDictionary.value] ?? ""
                     dataItem["image"] = _itemData[self.mapDictionary.image] ?? ""
+                    dataItem["calling_code"] = _itemData[self.mapDictionary.calling_code] ?? ""
                     let __item = Item<ItemImage>(data: dataItem)
                     self.items.append(__item)
                     self.listView.reloadData()
                     self.listView.tableHeaderView = nil
+                }
+            } else {
+                let response = json.dictionary
+                let result = response!["result"]
+
+                if let result = result {
+                    print("result object \(result)")
+                    if let items: [Any] = result as? [Any] {
+                        for _item in items {
+                            let _itemData:[String:Any] = _item as? [String:Any] ?? [:]
+                            var dataItem:[String: Any] = [:]
+                            print("result items in array \(_itemData)")
+                            dataItem["text"] = _itemData[self.mapDictionary.text] ?? ""
+                            dataItem["value"] = _itemData[self.mapDictionary.value] ?? ""
+                            dataItem["image"] = _itemData[self.mapDictionary.image] ?? ""
+                            dataItem["calling_code"] = _itemData[self.mapDictionary.calling_code] ?? ""
+                            let __item = Item<ItemImage>(data: dataItem)
+                            self.items.append(__item)
+                            self.listView.reloadData()
+                            self.listView.tableHeaderView = nil
+                        }
+                    } else {
+                        print("can not get result array 11")
+                    }
+                } else {
+                    print("can not get result array")
                 }
             }
             self.actLoading.stopAnimating()
